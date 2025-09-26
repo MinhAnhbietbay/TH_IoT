@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"path": "../../ThucHanhIoT"
+		},
+		{
+			"name": "BH1750",
+			"path": ".."
+		}
+	],
+	"settings": {}
+}
