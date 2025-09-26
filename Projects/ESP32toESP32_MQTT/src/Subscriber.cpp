@@ -8,7 +8,8 @@ const char* password = "1234567890";
 const char* mqtt_server = "test.mosquitto.org";
 
 WiFiClient espClient;
-PubSubClient client(espClient);
+PubSubClient client(espClient); // espClient để gửi/nhận message
+
 
 void connectWiFi() {
   WiFi.begin(ssid, password);
@@ -21,10 +22,11 @@ void connectWiFi() {
 }
 
 // Callback khi nhận dữ liệu
-void mqttCallback(char* topic, byte* message, unsigned int length) {
+// Message arrived [esp32/data] Hello from Minh Anh
+void mqttCallback(char* topic, byte* message, unsigned int length) { // truyền địa chỉ thông qua con trỏ
   Serial.print("Message arrived [");
   Serial.print(topic);
-  Serial.print("] ");
+  Serial.print("] "); 
   String msg;
   for (int i = 0; i < length; i++) {
     msg += (char)message[i];
@@ -35,9 +37,9 @@ void mqttCallback(char* topic, byte* message, unsigned int length) {
 void connectMQTT() {
   while (!client.connected()) {
     Serial.print("Connecting to MQTT...");
-    if (client.connect("ESP32Subscriber")) {
+    if (client.connect("ESP32Subscriber")) { // đăng nhập vào broker với ID "ESP32Subscriber"
       Serial.println("connected!");
-      client.subscribe("esp32/data");
+      client.subscribe("esp32/data"); // subscribe topic "esp32/data"
       Serial.println("Subscribed to topic: esp32/data");
     } else {
       Serial.print("failed, rc=");
@@ -52,7 +54,7 @@ void setup() {
   Serial.begin(115200);
   connectWiFi();
   client.setServer(mqtt_server, 1883);
-  client.setCallback(mqttCallback);
+  client.setCallback(mqttCallback); // có tin nhắn từ MQTT Broker gửi về (ESP32 nhận tin) thì callback
 }
 
 void loop() {
